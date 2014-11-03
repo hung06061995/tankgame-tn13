@@ -5,6 +5,8 @@
 #include "IPlayerInfo.h"
 #include "IGameInfo.h"
 #include "Command.h"
+#include "MY_Strategy.h"
+#include "MY_Stage1.h"
 
 class BasePlayer : public IPlayer {
 public:
@@ -25,5 +27,6 @@ protected:
   IGameInfo* _gameInfo;
 
   int _currentTank;
+  MY_Strategy *_strategy;
 };
 #endif

@@ -22,6 +22,9 @@ protected:
 
 	//returns true if this position is my tank
 	bool isMyTank(pair<int, int> pos);
+
+	//retunrs true if this position is enemy's tank
+	bool isEnemyTank(pair<int, int> pos);
 	
 	//returns true if this postion is an empty space or a bridge
 	bool isAvailable(pair<int, int> pos);

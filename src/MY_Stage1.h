@@ -9,7 +9,7 @@
 
 typedef vector<vector<int> > vectorInt2d;
 typedef vector<vector<pair<int, int> > > vectorPair2d;
-const int infinity = 999999;
+const int infinity = 999999999;
 
 class MY_Stage1 :
 	public MY_IStage

@@ -4,7 +4,9 @@
 #include "include/CImg.h"
 #include "internal/GameCreator.h"
 #include "internal/IController.h"
-#include "BasePlayer.h"
+#include "NHOM12Player.h"
+#include "RandomPlayer.h"
+#include "BasePlayer2.h"
 
 #include <cstdlib>
 #include <ctime>
@@ -25,8 +27,11 @@ int main(void) {
   gameController->setDisplay(&main_disp);
 
   // 3. load players and bind with controller
-  BasePlayer* player1 =  new BasePlayer();
-  BasePlayer* player2 =  new BasePlayer();
+  
+  BasePlayer2* player1 = new BasePlayer2();
+ // BasePlayer* player1 = new BasePlayer();
+
+  NHOM12Player* player2 = new NHOM12Player();
 
   gameController->registerPlayer(player1);
   gameController->registerPlayer(player2);

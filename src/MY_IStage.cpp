@@ -18,6 +18,16 @@ bool MY_IStage::isMyTank(pair<int, int> pos)
 	return false;
 }
 
+bool MY_IStage::isEnemyTank(pair<int, int> pos)
+{
+	char id = (*_gameInfo->getMap())(pos.first, pos.second);
+
+	if (_gameInfo->getMap()->isTank(id) && _gameInfo->getPlayerByID(id) != _playerInfo)
+		return true;
+
+	return false;
+}
+
 bool MY_IStage::isAvailable(pair<int, int> pos)
 {
 	char id = (*this->_gameInfo->getMap())(pos.first, pos.second);

@@ -3,8 +3,11 @@
 #include "IPlayerInfo.h"
 #include "IGameInfo.h"
 #include "Command.h"
+#include "MY_AllStage.h"
+
 #include <vector>
 #include <list>
+
 
 using namespace std;
 
@@ -19,6 +22,7 @@ protected:
 	
 	int currentStage;
 	vector<MY_IStage*> stage;
+	MY_IStage* special;
 
 public:
 	//loads new Strategy
@@ -27,6 +31,9 @@ public:
 	
 	//pushes new stage to the Strategy & update the playerInfo and gameInfo for that stage
 	void push(MY_IStage* st);
+	
+	//loads the special skill
+	void loadSpecial(MY_IStage* st);
 
 	//gets the next move of this strategy
 	Command nextMove();

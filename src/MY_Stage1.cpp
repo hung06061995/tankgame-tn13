@@ -52,6 +52,7 @@ void MY_Stage1::getInfoByDijkstra(const vectorInt2d& mapHP, vectorPair2d& nextPo
 	typedef pair<int, pair<int, pair<int, int> > > triple;
 	const int dx[] = { -1, 1, 0, 0 };
 	const int dy[] = { 0, 0, -1, 1 };
+	const int rate = 4000; //equal to the map size
 
 	IMap *_map = this->_gameInfo->getMap();
 	int _width = mapHP.size();
@@ -94,12 +95,13 @@ void MY_Stage1::getInfoByDijkstra(const vectorInt2d& mapHP, vectorPair2d& nextPo
 			if (isVisit[vpos.first][vpos.second])
 				continue;
 
-			int difAmm = amm[upos.first][upos.second] + mapHP[vpos.first][vpos.second] - amm[vpos.first][vpos.second];
-			int difDis = dis[upos.first][upos.second] + 1 - dis[vpos.first][vpos.second];
-			if (difAmm < 0 || (difAmm == 0 && difDis < 0))
+			
+			int tempAmm = amm[upos.first][upos.second] + mapHP[vpos.first][vpos.second];
+			int tempDis = dis[upos.first][upos.second] + 1;
+			if (tempAmm < amm[vpos.first][vpos.second] || (tempAmm == amm[vpos.first][vpos.second] && tempDis < dis[vpos.first][vpos.second]))
 			{
-				int tempAmm = amm[vpos.first][vpos.second] = amm[upos.first][upos.second] + mapHP[vpos.first][vpos.second];
-				int tempDis = dis[vpos.first][vpos.second] = dis[upos.first][upos.second] + 1;
+				amm[vpos.first][vpos.second] = tempAmm;
+				dis[vpos.first][vpos.second] = tempDis;
 				nextPos[vpos.first][vpos.second] = upos;
 				q.push(make_triple(tempAmm, tempDis, vpos));
 			}
@@ -134,14 +136,20 @@ void MY_Stage1::getNextPosition(vectorPair2d& nextPos, vectorInt2d& dis, vectorI
 	//for (int i = 0; i < width; ++i)
 	//	mapHP[i].resize(height, infinity);
 
-	
+	list<IMapObject*> iob;
 	list<IBlock*> lb = this->_gameInfo->getOnMapBlocks();
-	for (list<IBlock*>::iterator it = lb.begin(); it != lb.end(); ++it)
+	list<ITank*> lt = this->_playerInfo->getAliveTanks();
+	iob.insert(iob.end(), lt.begin(), lt.end());
+	iob.insert(iob.end(), lb.begin(), lb.end());
+	
+
+	for (list<IMapObject*>::iterator it = iob.begin(); it != iob.end(); ++it)
 	if ((*it)->isOnMap())
 	{
 		pair<int, int> pos = (*it)->getPosition();
 		mapHP[pos.first][pos.second] = (*it)->getHP();
 	}
+	
 
 	for (int i = 0; i < width; ++i)
 	for (int j = 0; j < height; ++j)
@@ -149,7 +157,7 @@ void MY_Stage1::getNextPosition(vectorPair2d& nextPos, vectorInt2d& dis, vectorI
 		char id = (*map)(i, j);
 
 		//if this position is an empty land, bridge, or my tank, sets HP
-		if (map->isEmptySpace(id) || map->isBridge(id) || (map->isTank(id) && this->_gameInfo->getPlayerByID(id) == this->_playerInfo))
+		if (map->isEmptySpace(id) || map->isBridge(id))
 		{
 			mapHP[i][j] = 0;
 		}
@@ -269,8 +277,11 @@ Command MY_Stage1::nextMove()
 
 	pair<int, int> cPos = chosenOne->getPosition();
 	pair<int, int> next = _nextPos[cPos.first][cPos.second];
+
+	//if next position is an empty space, moves
 	if (isAvailable(next))
 		return Command(chosenOne, Command::MOVE, next.first, next.second);
 
+	//otherwise, shoots that position
 	return Command(chosenOne, Command::FIRE, next.first, next.second);
 }

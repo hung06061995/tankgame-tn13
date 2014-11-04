@@ -1,17 +1,16 @@
-#ifndef __TANKGAME_BASEPLAYER__
-#define __TANKGAME_BASEPLAYER__
+#ifndef __RandomPlayer__
+#define __RandomPlayer__
 
 #include "IPlayer.h"
 #include "IPlayerInfo.h"
 #include "IGameInfo.h"
 #include "Command.h"
-#include "MY_Strategy.h"
-#include "MY_Stage1.h"
+//#include "MY_Strategy.h"
 
-class BasePlayer : public IPlayer {
+class RandomPlayer : public IPlayer {
 public:
-  BasePlayer();
-  ~BasePlayer();
+  RandomPlayer();
+  ~RandomPlayer();
 
   void onBindPlayerInfo(IPlayerInfo* playerInfo);
   void onBindGameInfo(IGameInfo* gameInfo);
@@ -27,6 +26,7 @@ protected:
   IGameInfo* _gameInfo;
 
   int _currentTank;
-  MY_Strategy *_strategy;
+
+ // MY_Strategy *mySt;
 };
 #endif
